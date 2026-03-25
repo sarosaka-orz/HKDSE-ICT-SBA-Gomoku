@@ -14,7 +14,7 @@ Make sure you have Python 3 installed on your PC, then download the script and u
 It is better if you have a terminal emulator which supports blur or transparent background, for example:   
 1. Kitty
 2. Alacritty
-3. iTerm2
+3. iTerm2   
 These are for macOS and Linux, if you don't have Linux machine or a Macintosh, Windows Terminal or PowerShell is fine.
 
 ## Plans
