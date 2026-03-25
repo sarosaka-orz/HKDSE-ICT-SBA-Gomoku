@@ -1,5 +1,5 @@
 # HKDSE SBA Gomoku Project
-by Sarosaka-orz
+by Sarosaka
 
 --------------
 
