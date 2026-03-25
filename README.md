@@ -22,3 +22,6 @@ Plan to add AI PvE functions in the future, maybe next month, based on CNN or Mi
 
 ## Contribution
 Please kindly open a issue if you found any bugs. Thanks.
+
+## P.S.
+This project is still WIP.
