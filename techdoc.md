@@ -25,7 +25,8 @@ while 0 <= nr < SIZE and 0 <= nc < SIZE and board[nr][nc] == p:
 ```
 
 Status variables: In the code, I set 2 main global variables for the game's experience optimization,
-`current_player` is set as a storage of current placing player, used for the judgment and the message system. `status_msg` is set as a temporary stack for the game's status, and printed out when a event is happened during the game's process. The reason we need a temporary stack is that we need a variable to store the status message even after the terminal screen has been cleared. After the clear, the support of `status_msg` will provide us the message used for displaying on the next game frame.
+`current_player` is set as a storage of current placing player, used for the judgment and the message system.   
+`status_msg` is set as a temporary stack for the game's status, and printed out when a event is happened during the game's process. The reason we need a temporary stack is that we need a variable to store the status message even after the terminal screen has been cleared. After the clear, the support of `status_msg` will provide us the message used for displaying on the next game frame.
 
 ## Section 3 : Core Algorithms
 
@@ -96,3 +97,48 @@ def create_board():
 
 ### Section 3 Part 4 : Printing Board
 
+In this part of the program, the program itself will print or display the board to the current terminal screen.
+
+Below is the first part of the code, it will first define the function itself, which let itself can be used in the main program, then it will call `clear_screen` function, it was used for clearing the terminal output to keep the screen clean, in order to improve the game experience.
+
+```Python
+def print_board(board, status_msg, current_player):
+    clear_screen()
+```
+After clearing the screen, program will first discover the 15 letters which is board is using, and then print the board by adding line break symbol \(`\n`\) and spaces. Then it will use `-` as a symbol for printing the border of the chess board.
+
+```Python
+    letters = [chr(ord('A') + i) for i in range(SIZE)]
+    print("\n      " + " ".join(letters))
+    print("     +" + "--" * SIZE + "+")
+```
+
+In the next period of the code, the script will call `for` loop, use `i` as a local variable, and the global variable `SIZE` as the range for the loop. Then it will set `row_num` and `row_content`, these two local variable will help the script to adjust the length of the row, or in another way, to make it aligned. After that, `row_content` will help us to store the chess' position data in the two-dimensional array we created. Moreover, the `print` function will print the position indicator \(A5 or H6\) above the border.
+
+```Python
+    for i in range(SIZE):
+        row_num = str(i + 1).rjust(2)
+        row_content = " ".join(board[i])
+        print(f" {row_num} | {row_content} | {row_num}")
+```
+Behind this period of the code, the script will call `print` function for 2 times, in order to display the bottom border of the chess board.
+
+```Python
+    print("     +" + "--" * SIZE + "+")
+    print("      " + " ".join(letters))
+```
+Additionally, the script will call `print` function for 3 times, in order to print `Current Player`, `System Msg\(abbreviation of message\)` and the bottom of the board. This is one of the most core part of the script, because it provides a improved experience for the player, and a pipeline for the player to know the situation and the event, or even a error thrown. We need to include this part of `print` function block in the `print_board` part, in order to keep them on the screen after we call the `clear_screen` function to clear the screen every time when the board needs refreshing.
+
+```Python
+    print(f"\n[ Current Player ]: {current_player}")
+    print(f"[ System Msg ]: {status_msg}")
+    print("-" * 40)
+```
+
+### Section 3 Part 5 : Winner Checking
+
+In this part of the technical document, we will break apart the most core algorithms in the Gomoku script - the winner checking part.
+
+The most straightforward and the most violent way to check the winner is to scan the whole chess board and looking for a continuous 5 chesses, whether it is in a row, a column or a diagonal.
+
+What is the problem of scanning the whole chess board? The most fatal problem is the poor performance. Although modern computers doesn't need this type of small optimization, but a huge performance problem is heaped up by small performance problems. So in this part, I decided to develop a new method of checking the winner, the answer is *local checking*.

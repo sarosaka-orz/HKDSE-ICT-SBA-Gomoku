@@ -2,8 +2,8 @@ import os
 
 SIZE = 15
 EMPTY = ' '
-BLACK = '●'
-WHITE = '◯'
+BLACK = 'X'
+WHITE = 'O'
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -49,20 +49,22 @@ def parse_input(input_str):
     except (ValueError, IndexError):
         return None, "Invalid input."
 
-def check_win(board, r, c, p):
+def check_win(board, rowc, column, player):
     directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
-    for dr, dc in directions:
+    for change_r, change_c in directions:
         count = 1
-        nr, nc = r + dr, c + dc
-        while 0 <= nr < SIZE and 0 <= nc < SIZE and board[nr][nc] == p:
+        new_r, new_c = rowc + change_r, column + change_c
+        while 0 <= new_r < SIZE and 0 <= new_c < SIZE and \
+            board[new_r][new_c] == player:
             count += 1
-            nr += dr
-            nc += dc
-        nr, nc = r - dr, c - dc
-        while 0 <= nr < SIZE and 0 <= nc < SIZE and board[nr][nc] == p:
+            new_r += change_r
+            new_c += change_c
+        new_r, new_c = rowc - change_r, column - change_c
+        while 0 <= new_r < SIZE and 0 <= new_c < SIZE and \
+            board[new_r][new_c] == player:
             count += 1
-            nr -= dr
-            nc -= dc
+            new_r -= change_r
+            new_c -= change_c
         if count >= 5:
             return True
     return False
@@ -73,13 +75,10 @@ def main():
     status_msg = f"Player {current_player} please place."
 
     while True:
-        # 1. 刷新視覺界面
         print_board(board, status_msg, current_player)
         
-        # 2. 獲取用戶輸入
         user_input = input("Please input the coordinate, or type in Q to quit.")
         
-        # 3. 座標解析與檢測系統
         result, error_err = parse_input(user_input)
         
         if result == 'QUIT':
@@ -103,7 +102,6 @@ def main():
             print("GAME OVER")
             break
             
-        # 6. 檢查平局
         if all(cell != EMPTY for row in board for cell in row):
             print_board(board, "It is a draw!", current_player)
             break
